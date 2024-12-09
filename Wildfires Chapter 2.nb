@@ -1,0 +1,1615 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Wolfram 14.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       154,          7]
+NotebookDataLength[     72036,       1607]
+NotebookOptionsPosition[     68528,       1545]
+NotebookOutlinePosition[     69074,       1564]
+CellTagsIndexPosition[     69031,       1561]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[TextData[{
+ "C H A P T E R \t",
+ StyleBox["2",
+  FontSize->21,
+  FontWeight->"Bold"]
+}], "BookChapterLabel",
+ CellChangeTimes->{{3.9427073655946217`*^9, 
+  3.94270739707856*^9}},ExpressionUUID->"26d3df60-460f-504d-b1f9-\
+f42dcf8d1838"],
+
+Cell["Wildfires", "BookChapterTitle",
+ CellChangeTimes->{{3.9408347088209705`*^9, 3.940834713179878*^9}, {
+  3.9427071037132244`*^9, 
+  3.942707106114172*^9}},ExpressionUUID->"c525ce74-888d-264f-864b-\
+dd137e0fd588"],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ 
+ CounterBox["BookChapterNumber"],
+ ".",
+ 
+ CounterBox["Section"],
+ ". Predator Prey"
+}], "Section",
+ CellChangeTimes->{{3.9412680000325966`*^9, 3.941268005623913*^9}, {
+  3.942556512437845*^9, 3.942556524635771*^9}, {3.9426050259130344`*^9, 
+  3.942605032712641*^9}},ExpressionUUID->"758b9bc6-8ba6-cb4c-a16f-\
+ecf47a06dbde"],
+
+Cell["", "Text",
+ CellChangeTimes->{{3.94260507502738*^9, 
+  3.9426050750302963`*^9}},ExpressionUUID->"79311ec6-fcb6-c148-bf3e-\
+68d721011c12"],
+
+Cell["simple predator prey model", "Text",
+ CellChangeTimes->{{3.942605075366329*^9, 3.9426050753682156`*^9}, {
+  3.942660475234337*^9, 
+  3.9426604857942524`*^9}},ExpressionUUID->"e3cf3017-1836-0546-959b-\
+e1357d06a2a9"],
+
+Cell["", "Text",ExpressionUUID->"3cddeeb6-1cd0-494b-8b58-51877261278d"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"RK45", " ", "Solver"}], " ", "*)"}], "\n", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"rk45Solver", " ", "=", " ", 
+     RowBox[{"Module", "[", "\n", "   ", 
+      RowBox[{
+       RowBox[{"{", "rk45Step", "}"}], ",", "\n", "   ", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"rk45Step", "[", 
+          RowBox[{"f_", ",", " ", "t_", ",", " ", "x_", ",", " ", "h_"}], 
+          "]"}], " ", ":=", " ", 
+         RowBox[{"Module", "[", "\n", "     ", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+            "k1", ",", " ", "k2", ",", " ", "k3", ",", " ", "k4", ",", " ", 
+             "k5", ",", " ", "k6", ",", " ", "xNext", ",", " ", "tNext"}], 
+            "}"}], ",", "\n", "     ", 
+           RowBox[{
+            RowBox[{"k1", " ", "=", " ", 
+             RowBox[{"h", " ", 
+              RowBox[{"f", "[", 
+               RowBox[{"t", ",", " ", "x"}], "]"}]}]}], ";", "\n", "     ", 
+            RowBox[{"k2", " ", "=", " ", 
+             RowBox[{"h", " ", 
+              RowBox[{"f", "[", 
+               RowBox[{
+                RowBox[{"t", " ", "+", " ", 
+                 RowBox[{"h", "/", "4"}]}], ",", " ", 
+                RowBox[{"x", " ", "+", " ", 
+                 RowBox[{"k1", "/", "4"}]}]}], "]"}]}]}], ";", "\n", "     ", 
+            RowBox[{"k3", " ", "=", " ", 
+             RowBox[{"h", " ", 
+              RowBox[{"f", "[", 
+               RowBox[{
+                RowBox[{"t", " ", "+", " ", 
+                 RowBox[{"3", " ", 
+                  RowBox[{"h", "/", "8"}]}]}], ",", " ", 
+                RowBox[{"x", " ", "+", " ", 
+                 RowBox[{
+                  RowBox[{"(", 
+                   RowBox[{
+                    RowBox[{"3", " ", "k1"}], " ", "+", " ", 
+                    RowBox[{"9", " ", "k2"}]}], ")"}], "/", "32"}]}]}], 
+               "]"}]}]}], ";", "\n", "     ", 
+            RowBox[{"k4", " ", "=", " ", 
+             RowBox[{"h", " ", 
+              RowBox[{"f", "[", 
+               RowBox[{
+                RowBox[{"t", " ", "+", " ", 
+                 RowBox[{"12", " ", 
+                  RowBox[{"h", "/", "13"}]}]}], ",", " ", "\n", "       ", 
+                RowBox[{"x", " ", "+", " ", 
+                 RowBox[{
+                  RowBox[{"(", 
+                   RowBox[{
+                    RowBox[{"1932", " ", "k1"}], " ", "-", " ", 
+                    RowBox[{"7200", " ", "k2"}], " ", "+", " ", 
+                    RowBox[{"7296", " ", "k3"}]}], ")"}], "/", "2197"}]}]}], 
+               "]"}]}]}], ";", "\n", "     ", 
+            RowBox[{"k5", " ", "=", " ", 
+             RowBox[{"h", " ", 
+              RowBox[{"f", "[", 
+               RowBox[{
+                RowBox[{"t", " ", "+", " ", "h"}], ",", " ", "\n", "       ", 
+                RowBox[{"x", " ", "+", " ", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{"439", " ", 
+                    RowBox[{"k1", "/", "216"}]}], " ", "-", " ", 
+                   RowBox[{"8", " ", "k2"}], " ", "+", " ", 
+                   RowBox[{"3680", " ", 
+                    RowBox[{"k3", "/", "513"}]}], " ", "-", " ", 
+                   RowBox[{"845", " ", 
+                    RowBox[{"k4", "/", "4104"}]}]}], ")"}]}]}], "]"}]}]}], 
+            ";", "\n", "     ", 
+            RowBox[{"k6", " ", "=", " ", 
+             RowBox[{"h", " ", 
+              RowBox[{"f", "[", 
+               RowBox[{
+                RowBox[{"t", " ", "+", " ", 
+                 RowBox[{"h", "/", "2"}]}], ",", " ", "\n", "       ", 
+                RowBox[{"x", " ", "+", " ", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"-", "8"}], " ", 
+                    RowBox[{"k1", "/", "27"}]}], " ", "+", " ", 
+                   RowBox[{"2", " ", "k2"}], " ", "-", " ", 
+                   RowBox[{"3544", " ", 
+                    RowBox[{"k3", "/", "2565"}]}], " ", "+", " ", 
+                   RowBox[{"1859", " ", 
+                    RowBox[{"k4", "/", "4104"}]}], " ", "-", " ", "\n", 
+                   "          ", 
+                   RowBox[{"11", " ", 
+                    RowBox[{"k5", "/", "40"}]}]}], ")"}]}]}], "]"}]}]}], ";", 
+            "\n", "     ", 
+            RowBox[{"xNext", " ", "=", " ", 
+             RowBox[{"x", " ", "+", " ", "\n", "       ", 
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{"16", " ", 
+                 RowBox[{"k1", "/", "135"}]}], " ", "+", " ", 
+                RowBox[{"6656", " ", 
+                 RowBox[{"k3", "/", "12825"}]}], " ", "+", " ", 
+                RowBox[{"28561", " ", 
+                 RowBox[{"k4", "/", "56430"}]}], " ", "-", " ", 
+                RowBox[{"9", " ", 
+                 RowBox[{"k5", "/", "50"}]}], " ", "+", " ", "\n", 
+                "         ", 
+                RowBox[{"2", " ", 
+                 RowBox[{"k6", "/", "55"}]}]}], ")"}]}]}], ";", "\n", "     ", 
+            RowBox[{"tNext", " ", "=", " ", 
+             RowBox[{"t", " ", "+", " ", "h"}]}], ";", "\n", "     ", 
+            RowBox[{"{", 
+             RowBox[{"tNext", ",", " ", "xNext"}], "}"}]}]}], "\n", "     ", 
+          "]"}]}], ";", "\n", "   ", "rk45Step"}]}], "\n", "   ", "]"}]}], 
+    ";"}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Predator", "-", 
+     RowBox[{"Prey", " ", "Firefighter", " ", "Model"}]}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"simulateFirefighters", " ", "=", " ", "\n", "  ", 
+     RowBox[{"Function", "[", "\n", "   ", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "r", ",", " ", "a", ",", " ", "b", ",", " ", "c", ",", " ", "F0", ",",
+          " ", "W0", ",", " ", "tMax", ",", " ", "h"}], "}"}], ",", "\n", 
+       "   ", 
+       RowBox[{"Module", "[", "\n", "    ", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"t", " ", "=", " ", "0"}], ",", " ", 
+           RowBox[{"x", " ", "=", " ", 
+            RowBox[{"{", 
+             RowBox[{"F0", ",", " ", "W0"}], "}"}]}], ",", " ", 
+           RowBox[{"results", " ", "=", " ", 
+            RowBox[{"{", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", " ", 
+               RowBox[{"{", 
+                RowBox[{"F0", ",", " ", "W0"}], "}"}]}], "}"}], "}"}]}], ",", 
+           " ", "f"}], "}"}], ",", "\n", "    ", 
+         RowBox[{
+          RowBox[{"f", " ", "=", " ", 
+           RowBox[{"Function", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"t", ",", " ", "x"}], "}"}], ",", "\n", "      ", 
+             RowBox[{"Module", "[", "\n", "       ", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"F", " ", "=", " ", 
+                  RowBox[{"x", "[", 
+                   RowBox[{"[", "1", "]"}], "]"}]}], ",", " ", 
+                 RowBox[{"W", " ", "=", " ", 
+                  RowBox[{"x", "[", 
+                   RowBox[{"[", "2", "]"}], "]"}]}]}], "}"}], ",", "\n", 
+               "       ", 
+               RowBox[{"(*", " ", 
+                RowBox[{
+                 RowBox[{"dF", "/", "dt"}], " ", 
+                 RowBox[{"(", 
+                  RowBox[{"Fire", " ", "Growth"}], ")"}]}], " ", "*)"}], "\n",
+                "       ", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"r", " ", "F"}], " ", "-", " ", 
+                  RowBox[{"a", " ", "F", " ", "W"}]}], ",", "\n", "       ", 
+                 RowBox[{"(*", "  ", 
+                  RowBox[{
+                   RowBox[{"dW", "/", "dt"}], " ", 
+                   RowBox[{"(", 
+                    RowBox[{"Firefighter", " ", "Change"}], ")"}]}], " ", 
+                  "*)"}], "\n", "       ", 
+                 RowBox[{
+                  RowBox[{"b", " ", "F", " ", "W"}], " ", "-", " ", 
+                  RowBox[{"c", " ", "W"}]}]}], "}"}]}], "\n", "       ", 
+              "]"}]}], "\n", "      ", "]"}]}], ";", "\n", "    ", 
+          RowBox[{"While", "[", 
+           RowBox[{
+            RowBox[{"t", " ", "<", " ", "tMax"}], ",", " ", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"t", ",", " ", "x"}], "}"}], " ", "=", " ", 
+              RowBox[{"rk45Solver", "[", 
+               RowBox[{"f", ",", " ", "t", ",", " ", "x", ",", " ", "h"}], 
+               "]"}]}], ";", "\n", "     ", 
+             RowBox[{"AppendTo", "[", 
+              RowBox[{"results", ",", " ", 
+               RowBox[{"{", 
+                RowBox[{"t", ",", " ", "x"}], "}"}]}], "]"}]}]}], "]"}], ";", 
+          "\n", "    ", "results"}]}], "\n", "    ", "]"}]}], "\n", "   ", 
+      "]"}]}], ";"}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Phase", " ", "Diagram"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"plotPhaseDiagram", " ", "=", " ", "\n", "  ", 
+     RowBox[{"Function", "[", "\n", "   ", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "r", ",", " ", "a", ",", " ", "b", ",", " ", "c", ",", " ", "F0", ",",
+          " ", "W0", ",", " ", "tMax", ",", " ", "h"}], "}"}], ",", "\n", 
+       "   ", 
+       RowBox[{"Module", "[", "\n", "    ", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+          "results", ",", " ", "vectorField", ",", " ", "FRange", ",", " ", 
+           "WRange"}], "}"}], ",", "\n", "    ", 
+         RowBox[{
+          RowBox[{"results", " ", "=", " ", 
+           RowBox[{"simulateFirefighters", "[", 
+            RowBox[{
+            "r", ",", " ", "a", ",", " ", "b", ",", " ", "c", ",", " ", "F0", 
+             ",", " ", "W0", ",", " ", "tMax", ",", " ", "h"}], "]"}]}], ";", 
+          "\n", "    ", 
+          RowBox[{"vectorField", " ", "=", " ", "\n", "     ", 
+           RowBox[{"Function", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"F", ",", " ", "W"}], "}"}], ",", " ", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"r", " ", "F"}], " ", "-", " ", 
+                RowBox[{"a", " ", "F", " ", "W"}]}], ",", " ", 
+               RowBox[{
+                RowBox[{"b", " ", "F", " ", "W"}], " ", "-", " ", 
+                RowBox[{"c", " ", "W"}]}]}], "}"}]}], "]"}]}], ";", "\n", 
+          "    ", 
+          RowBox[{"FRange", " ", "=", " ", 
+           RowBox[{"{", 
+            RowBox[{"0", ",", " ", "200"}], "}"}]}], ";", "\n", "    ", 
+          RowBox[{"WRange", " ", "=", " ", 
+           RowBox[{"{", 
+            RowBox[{"0", ",", " ", "100"}], "}"}]}], ";", "\n", "    ", 
+          RowBox[{"Show", "[", "\n", "     ", 
+           RowBox[{
+            RowBox[{"StreamPlot", "[", "\n", "      ", 
+             RowBox[{
+              RowBox[{"vectorField", "[", 
+               RowBox[{"F", ",", " ", "W"}], "]"}], ",", "\n", "      ", 
+              RowBox[{"{", 
+               RowBox[{"F", ",", " ", 
+                RowBox[{"Sequence", " ", "@@", " ", "FRange"}]}], "}"}], ",", 
+              "\n", "      ", 
+              RowBox[{"{", 
+               RowBox[{"W", ",", " ", 
+                RowBox[{"Sequence", " ", "@@", " ", "WRange"}]}], "}"}], ",", 
+              "\n", "      ", 
+              RowBox[{"StreamStyle", " ", "->", " ", 
+               RowBox[{"Arrowheads", "[", "Small", "]"}]}], ",", "\n", 
+              "      ", 
+              RowBox[{"Frame", " ", "->", " ", "True"}], ",", "\n", "      ", 
+              RowBox[{"FrameLabel", " ", "->", " ", 
+               RowBox[{"{", 
+                RowBox[{
+                "\"\<Fire (F)\>\"", ",", " ", "\"\<Firefighters (W)\>\""}], 
+                "}"}]}]}], "\n", "      ", "]"}], ",", "\n", "     ", 
+            RowBox[{"Graphics", "[", 
+             RowBox[{"{", 
+              RowBox[{"Thick", ",", " ", "Red", ",", " ", "\n", "       ", 
+               RowBox[{"Line", "[", 
+                RowBox[{"Transpose", "[", 
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{"results", "[", 
+                    RowBox[{"[", 
+                    RowBox[{"All", ",", " ", "2", ",", " ", "1"}], "]"}], 
+                    "]"}], ",", " ", "\n", "          ", 
+                   RowBox[{"results", "[", 
+                    RowBox[{"[", 
+                    RowBox[{"All", ",", " ", "2", ",", " ", "2"}], "]"}], 
+                    "]"}]}], "}"}], "]"}], "]"}]}], "}"}], "]"}]}], "\n", 
+           "     ", "]"}]}]}], "\n", "    ", "]"}]}], "\n", "   ", "]"}]}], 
+    ";"}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Time", " ", "Series", " ", "Plot"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"plotFirefightersTimeSeries", " ", "=", " ", "\n", "  ", 
+     RowBox[{"Function", "[", "\n", "   ", 
+      RowBox[{
+       RowBox[{"{", "results", "}"}], ",", "\n", "   ", 
+       RowBox[{"Module", "[", "\n", "    ", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"tValues", ",", " ", "FValues", ",", " ", "WValues"}], 
+          "}"}], ",", "\n", "    ", 
+         RowBox[{
+          RowBox[{"tValues", " ", "=", " ", 
+           RowBox[{"results", "[", 
+            RowBox[{"[", 
+             RowBox[{"All", ",", " ", "1"}], "]"}], "]"}]}], ";", "\n", 
+          "    ", 
+          RowBox[{"FValues", " ", "=", " ", 
+           RowBox[{"results", "[", 
+            RowBox[{"[", 
+             RowBox[{"All", ",", " ", "2", ",", " ", "1"}], "]"}], "]"}]}], 
+          ";", "\n", "    ", 
+          RowBox[{"WValues", " ", "=", " ", 
+           RowBox[{"results", "[", 
+            RowBox[{"[", 
+             RowBox[{"All", ",", " ", "2", ",", " ", "2"}], "]"}], "]"}]}], 
+          ";", "\n", "    ", 
+          RowBox[{"ListLinePlot", "[", "\n", "     ", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"Transpose", "[", 
+               RowBox[{"{", 
+                RowBox[{"tValues", ",", " ", "FValues"}], "}"}], "]"}], ",", 
+              " ", "\n", "      ", 
+              RowBox[{"Transpose", "[", 
+               RowBox[{"{", 
+                RowBox[{"tValues", ",", " ", "WValues"}], "}"}], "]"}]}], 
+             "}"}], ",", "\n", "     ", 
+            RowBox[{"PlotStyle", " ", "->", " ", 
+             RowBox[{"{", 
+              RowBox[{"Orange", ",", " ", "Blue"}], "}"}]}], ",", "\n", 
+            "     ", 
+            RowBox[{"Frame", " ", "->", " ", "True"}], ",", "\n", "     ", 
+            RowBox[{"FrameLabel", " ", "->", " ", 
+             RowBox[{"{", 
+              RowBox[{"\"\<Time\>\"", ",", " ", "\"\<Population\>\""}], 
+              "}"}]}], ",", "\n", "     ", 
+            RowBox[{"PlotLegends", " ", "->", " ", 
+             RowBox[{"{", 
+              RowBox[{
+              "\"\<Fire (F)\>\"", ",", " ", "\"\<Firefighters (W)\>\""}], 
+              "}"}]}], ",", "\n", "     ", 
+            RowBox[{"ImageSize", " ", "->", " ", "Large"}]}], "\n", "     ", 
+           "]"}]}]}], "\n", "    ", "]"}]}], "\n", "   ", "]"}]}], ";"}], 
+   "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Manipulate", " ", "Plot"}], " ", "*)"}], "\n", 
+   RowBox[{"Manipulate", "[", "\n", " ", 
+    RowBox[{
+     RowBox[{"Module", "[", "\n", "  ", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"results", ",", " ", "phasePlot"}], "}"}], ",", "\n", "  ", 
+       RowBox[{
+        RowBox[{"results", " ", "=", " ", 
+         RowBox[{"simulateFirefighters", "[", 
+          RowBox[{
+          "r", ",", " ", "a", ",", " ", "b", ",", " ", "c", ",", " ", "F0", 
+           ",", " ", "W0", ",", " ", "tMax", ",", " ", "h"}], "]"}]}], ";", 
+        "\n", "  ", 
+        RowBox[{"phasePlot", " ", "=", " ", 
+         RowBox[{"plotPhaseDiagram", "[", 
+          RowBox[{
+          "r", ",", " ", "a", ",", " ", "b", ",", " ", "c", ",", " ", "F0", 
+           ",", " ", "W0", ",", " ", "tMax", ",", " ", "h"}], "]"}]}], ";", 
+        "\n", "  ", 
+        RowBox[{"Column", "[", "\n", "   ", 
+         RowBox[{"{", "\n", "    ", 
+          RowBox[{
+           RowBox[{"Style", "[", 
+            RowBox[{
+            "\"\<Fire vs. Firefighters (Predator-Prey) Model\>\"", ",", " ", 
+             "Bold", ",", " ", "14"}], "]"}], ",", "\n", "    ", 
+           RowBox[{"plotFirefightersTimeSeries", "[", "results", "]"}], ",", 
+           "\n", "    ", "phasePlot"}], "\n", "    ", "}"}], "\n", "   ", 
+         "]"}]}]}], "\n", "  ", "]"}], ",", "\n", " ", 
+     RowBox[{"(*", " ", 
+      RowBox[{"Sliders", " ", "for", " ", "parameters"}], " ", "*)"}], "\n", 
+     " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"r", ",", " ", "0.2", ",", " ", "\"\<Fire Growth (r)\>\""}], 
+        "}"}], ",", " ", "0.05", ",", " ", "0.5", ",", " ", "0.05"}], "}"}], 
+     ",", "\n", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "a", ",", " ", "0.008", ",", " ", "\"\<Suppression Rate (a)\>\""}], 
+        "}"}], ",", " ", "0.001", ",", " ", "0.05", ",", " ", "0.001"}], 
+      "}"}], ",", "\n", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "b", ",", " ", "0.002", ",", " ", 
+         "\"\<Firefighter Recruitment (b)\>\""}], "}"}], ",", " ", "0.001", 
+       ",", " ", "0.05", ",", " ", "0.001"}], "}"}], ",", "\n", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "c", ",", " ", "0.1", ",", " ", "\"\<Firefighter Depletion (c)\>\""}],
+         "}"}], ",", " ", "0.05", ",", " ", "0.5", ",", " ", "0.01"}], "}"}], 
+     ",", "\n", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "F0", ",", " ", "100", ",", " ", "\"\<Initial Fire (F0)\>\""}], "}"}],
+        ",", " ", "10", ",", " ", "200", ",", " ", "10"}], "}"}], ",", "\n", 
+     " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "W0", ",", " ", "20", ",", " ", "\"\<Initial Firefighters (W0)\>\""}],
+         "}"}], ",", " ", "0", ",", " ", "100", ",", " ", "5"}], "}"}], ",", 
+     "\n", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"tMax", ",", " ", "100", ",", " ", "\"\<Total Time\>\""}], 
+        "}"}], ",", " ", "50", ",", " ", "200", ",", " ", "10"}], "}"}], ",", 
+     "\n", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"h", ",", " ", "0.1", ",", " ", "\"\<Step Size\>\""}], "}"}], 
+       ",", " ", "0.01", ",", " ", "1.0", ",", " ", "0.01"}], "}"}], ",", 
+     "\n", " ", 
+     RowBox[{"ControlPlacement", " ", "->", " ", "Left"}], ",", " ", 
+     RowBox[{"SaveDefinitions", " ", "->", " ", "True"}]}], "\n", " ", 
+    "]"}]}]}]], "Code",
+ CellChangeTimes->{{3.9426050840946503`*^9, 3.942605087098551*^9}, {
+   3.942605134441292*^9, 3.942605155283514*^9}, 3.94260557283794*^9, {
+   3.9426056660913506`*^9, 3.9426056804812145`*^9}, {3.9426057116471004`*^9, 
+   3.942605717573889*^9}, 3.942605937029892*^9, {3.9426603739823055`*^9, 
+   3.942660398817278*^9}, {3.942660568501831*^9, 3.9426605849761543`*^9}, 
+   3.9427286165024815`*^9, {3.9427294535409145`*^9, 3.9427294546801853`*^9}},
+ CellLabel->"In[44]:=",ExpressionUUID->"22091ba0-514d-6f48-9fe7-cf17163093b4"],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`a$$ = 0.004, $CellContext`b$$ = 
+    0.007, $CellContext`c$$ = 0.26, $CellContext`F0$$ = 
+    100, $CellContext`h$$ = 0.1, $CellContext`r$$ = 0.5, $CellContext`tMax$$ =
+     100, $CellContext`W0$$ = 20, Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"untitled\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`r$$], 0.2, "Fire Growth (r)"}, 0.05, 0.5, 0.05, 
+      ControlType -> Manipulator}, {{
+       Hold[$CellContext`a$$], 0.008, "Suppression Rate (a)"}, 0.001, 0.05, 
+      0.001, ControlType -> Manipulator}, {{
+       Hold[$CellContext`b$$], 0.002, "Firefighter Recruitment (b)"}, 0.001, 
+      0.05, 0.001, ControlType -> Manipulator}, {{
+       Hold[$CellContext`c$$], 0.1, "Firefighter Depletion (c)"}, 0.05, 0.5, 
+      0.01, ControlType -> Manipulator}, {{
+       Hold[$CellContext`F0$$], 100, "Initial Fire (F0)"}, 10, 200, 10, 
+      ControlType -> Manipulator}, {{
+       Hold[$CellContext`W0$$], 20, "Initial Firefighters (W0)"}, 0, 100, 5, 
+      ControlType -> Manipulator}, {{
+       Hold[$CellContext`tMax$$], 100, "Total Time"}, 50, 200, 10, 
+      ControlType -> Manipulator}, {{
+       Hold[$CellContext`h$$], 0.1, "Step Size"}, 0.01, 1., 0.01, ControlType -> 
+      Manipulator}}, Typeset`size$$ = {
+    769.4169156360626, {307.30337740883976`, 313.1234947224874}}, 
+    Typeset`update$$ = 0, Typeset`initDone$$, Typeset`skipInitDone$$ = False, 
+    Typeset`keyframeActionsQ$$ = False, Typeset`keyframeList$$ = {}}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`a$$ = 0.008, $CellContext`b$$ = 
+        0.002, $CellContext`c$$ = 0.1, $CellContext`F0$$ = 
+        100, $CellContext`h$$ = 0.1, $CellContext`r$$ = 
+        0.2, $CellContext`tMax$$ = 100, $CellContext`W0$$ = 20}, 
+      "ControllerVariables" :> {}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$, Typeset`keyframeActionsQ$$, 
+        Typeset`keyframeList$$}, "Body" :> 
+      Module[{$CellContext`results$, $CellContext`phasePlot$}, \
+$CellContext`results$ = $CellContext`simulateFirefighters[$CellContext`r$$, \
+$CellContext`a$$, $CellContext`b$$, $CellContext`c$$, $CellContext`F0$$, \
+$CellContext`W0$$, $CellContext`tMax$$, $CellContext`h$$]; \
+$CellContext`phasePlot$ = $CellContext`plotPhaseDiagram[$CellContext`r$$, \
+$CellContext`a$$, $CellContext`b$$, $CellContext`c$$, $CellContext`F0$$, \
+$CellContext`W0$$, $CellContext`tMax$$, $CellContext`h$$]; Column[{
+           Style["Fire vs. Firefighters (Predator-Prey) Model", Bold, 14], 
+           $CellContext`plotFirefightersTimeSeries[$CellContext`results$], \
+$CellContext`phasePlot$}]], 
+      "Specifications" :> {{{$CellContext`r$$, 0.2, "Fire Growth (r)"}, 0.05, 
+         0.5, 0.05}, {{$CellContext`a$$, 0.008, "Suppression Rate (a)"}, 
+         0.001, 0.05, 
+         0.001}, {{$CellContext`b$$, 0.002, "Firefighter Recruitment (b)"}, 
+         0.001, 0.05, 
+         0.001}, {{$CellContext`c$$, 0.1, "Firefighter Depletion (c)"}, 0.05, 
+         0.5, 0.01}, {{$CellContext`F0$$, 100, "Initial Fire (F0)"}, 10, 200, 
+         10}, {{$CellContext`W0$$, 20, "Initial Firefighters (W0)"}, 0, 100, 
+         5}, {{$CellContext`tMax$$, 100, "Total Time"}, 50, 200, 
+         10}, {{$CellContext`h$$, 0.1, "Step Size"}, 0.01, 1., 0.01}}, 
+      "Options" :> {ControlPlacement -> Left}, "DefaultOptions" :> {}],
+     ImageSizeCache->{
+      1163.9751914219858`, {338.2713070963398, 344.09142440998744`}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    Initialization:>({$CellContext`phasePlot = Function[$CellContext`f$, 
+         Manipulate[
+          
+          Module[{$CellContext`sign$ = 
+            D[$CellContext`f$, $CellContext`x] > 0, $CellContext`nodes$ = 
+            Select[Element[#, Reals]& ][
+              ReplaceAll[$CellContext`x, 
+               Solve[$CellContext`f$ == 0, $CellContext`x]]]}, 
+           
+           Plot[$CellContext`f$, {$CellContext`x, -3, 3}, 
+            PlotRange -> {-5, 5}, Epilog -> {
+              PointSize[Large], 
+              Point[
+               Map[{#, 0}& ][
+                Select[Not[
+                  
+                  ReplaceAll[$CellContext`sign$, $CellContext`x -> #]]& \
+][$CellContext`nodes$]]], 
+              Point[
+               Map[{#, 0}& ][
+                Select[
+                ReplaceAll[$CellContext`sign$, $CellContext`x -> #]& \
+][$CellContext`nodes$]]], White, 
+              Point[
+               Map[{#, 0}& ][
+                Select[
+                ReplaceAll[$CellContext`sign$, $CellContext`x -> #]& \
+][$CellContext`nodes$]]]}, 
+            AxesLabel -> {"x", "\!\(\*FractionBox[\(dx\), \(dt\)]\)"}]], {
+          FE`r$$1894, -3, 3}]], Attributes[$CellContext`f$] = {Temporary}, 
+       Attributes[$CellContext`sign$] = {Temporary}, 
+       Attributes[$CellContext`nodes$] = {
+        Temporary}, $CellContext`simulateFirefighters = 
+       Function[{$CellContext`r, $CellContext`a, $CellContext`b, \
+$CellContext`c, $CellContext`F0, $CellContext`W0, $CellContext`tMax, \
+$CellContext`h}, 
+         Module[{$CellContext`t = 
+           0, $CellContext`x = {$CellContext`F0, $CellContext`W0}, \
+$CellContext`results = {{
+             0, {$CellContext`F0, $CellContext`W0}}}, $CellContext`f}, \
+$CellContext`f = Function[{$CellContext`t, $CellContext`x}, 
+             
+             Module[{$CellContext`F = Part[$CellContext`x, 1], $CellContext`W = 
+               Part[$CellContext`x, 
+                 2]}, {$CellContext`r $CellContext`F - $CellContext`a \
+$CellContext`F $CellContext`W, $CellContext`b $CellContext`F $CellContext`W - \
+$CellContext`c $CellContext`W}]]; 
+          While[$CellContext`t < $CellContext`tMax, {$CellContext`t, \
+$CellContext`x} = $CellContext`rk45Solver[$CellContext`f, $CellContext`t, \
+$CellContext`x, $CellContext`h]; 
+            AppendTo[$CellContext`results, {$CellContext`t, $CellContext`x}]]; \
+$CellContext`results]], $CellContext`f = 
+       Function[{$CellContext`a, $CellContext`b, $CellContext`c, \
+$CellContext`d, $CellContext`e, $CellContext`f}, 
+         Function[{$CellContext`t, $CellContext`x, $CellContext`y, \
+$CellContext`z}, {($CellContext`z - $CellContext`b) $CellContext`x - \
+$CellContext`d $CellContext`y, $CellContext`d $CellContext`x + \
+($CellContext`z - $CellContext`b) $CellContext`y, $CellContext`c + \
+$CellContext`a $CellContext`z - $CellContext`z^3/
+           3 - ($CellContext`x^2 + $CellContext`y^2) (
+            1 + $CellContext`e $CellContext`z) + $CellContext`f \
+$CellContext`z $CellContext`x^3}]], $CellContext`rk45Solver = \
+$CellContext`rk45Step$517853, 
+       Attributes[$CellContext`rk45Step$517853] = {
+        Temporary}, $CellContext`rk45Step$517853[
+         Pattern[$CellContext`f, 
+          Blank[]], 
+         Pattern[$CellContext`t, 
+          Blank[]], 
+         Pattern[$CellContext`x, 
+          Blank[]], 
+         Pattern[$CellContext`h, 
+          Blank[]]] := 
+       Module[{$CellContext`k1, $CellContext`k2, $CellContext`k3, \
+$CellContext`k4, $CellContext`k5, $CellContext`k6, $CellContext`xNext, \
+$CellContext`tNext}, $CellContext`k1 = $CellContext`h \
+$CellContext`f[$CellContext`t, $CellContext`x]; $CellContext`k2 = \
+$CellContext`h $CellContext`f[$CellContext`t + $CellContext`h/
+              4, $CellContext`x + $CellContext`k1/
+              4]; $CellContext`k3 = $CellContext`h \
+$CellContext`f[$CellContext`t + 
+             3 ($CellContext`h/8), $CellContext`x + (3 $CellContext`k1 + 
+               9 $CellContext`k2)/
+              32]; $CellContext`k4 = $CellContext`h \
+$CellContext`f[$CellContext`t + 
+             12 ($CellContext`h/13), $CellContext`x + (1932 $CellContext`k1 - 
+               7200 $CellContext`k2 + 7296 $CellContext`k3)/
+              2197]; $CellContext`k5 = $CellContext`h \
+$CellContext`f[$CellContext`t + $CellContext`h, $CellContext`x + (
+              439 ($CellContext`k1/216) - 8 $CellContext`k2 + 
+              3680 ($CellContext`k3/513) - 
+              845 ($CellContext`k4/
+               4104))]; $CellContext`k6 = $CellContext`h \
+$CellContext`f[$CellContext`t + $CellContext`h/
+              2, $CellContext`x + ((-8) ($CellContext`k1/27) + 
+              2 $CellContext`k2 - 3544 ($CellContext`k3/2565) + 
+              1859 ($CellContext`k4/4104) - 
+              11 ($CellContext`k5/
+               40))]; $CellContext`xNext = $CellContext`x + (
+            16 ($CellContext`k1/135) + 6656 ($CellContext`k3/12825) + 
+            28561 ($CellContext`k4/56430) - 9 ($CellContext`k5/50) + 
+            2 ($CellContext`k6/
+              55)); $CellContext`tNext = $CellContext`t + $CellContext`h; \
+{$CellContext`tNext, $CellContext`xNext}], $CellContext`plotPhaseDiagram = 
+       Function[{$CellContext`r, $CellContext`a, $CellContext`b, \
+$CellContext`c, $CellContext`F0, $CellContext`W0, $CellContext`tMax, \
+$CellContext`h}, 
+         Module[{$CellContext`results, $CellContext`vectorField, \
+$CellContext`FRange, $CellContext`WRange}, $CellContext`results = \
+$CellContext`simulateFirefighters[$CellContext`r, $CellContext`a, \
+$CellContext`b, $CellContext`c, $CellContext`F0, $CellContext`W0, \
+$CellContext`tMax, $CellContext`h]; $CellContext`vectorField = 
+           Function[{$CellContext`F, $CellContext`W}, {$CellContext`r \
+$CellContext`F - $CellContext`a $CellContext`F $CellContext`W, $CellContext`b \
+$CellContext`F $CellContext`W - $CellContext`c $CellContext`W}]; \
+$CellContext`FRange = {0, 200}; $CellContext`WRange = {0, 100}; Show[
+            StreamPlot[
+             $CellContext`vectorField[$CellContext`F, $CellContext`W], \
+{$CellContext`F, 
+              Apply[Sequence, $CellContext`FRange]}, {$CellContext`W, 
+              Apply[Sequence, $CellContext`WRange]}, StreamStyle -> 
+             Arrowheads[Small], Frame -> True, 
+             FrameLabel -> {"Fire (F)", "Firefighters (W)"}], 
+            Graphics[{Thick, Red, 
+              Line[
+               Transpose[{
+                 Part[$CellContext`results, All, 2, 1], 
+                 
+                 Part[$CellContext`results, All, 2, 
+                  2]}]]}]]]], $CellContext`plotFirefightersTimeSeries = 
+       Function[{$CellContext`results}, 
+         Module[{$CellContext`tValues, $CellContext`FValues, \
+$CellContext`WValues}, $CellContext`tValues = 
+           Part[$CellContext`results, All, 1]; $CellContext`FValues = 
+           Part[$CellContext`results, All, 2, 1]; $CellContext`WValues = 
+           Part[$CellContext`results, All, 2, 2]; ListLinePlot[{
+             Transpose[{$CellContext`tValues, $CellContext`FValues}], 
+             Transpose[{$CellContext`tValues, $CellContext`WValues}]}, 
+            PlotStyle -> {Orange, Blue}, Frame -> True, 
+            FrameLabel -> {"Time", "Population"}, 
+            PlotLegends -> {"Fire (F)", "Firefighters (W)"}, ImageSize -> 
+            Large]]]}; Typeset`initDone$$ = True),
+    SynchronousInitialization->True,
+    UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{
+  3.942605087558485*^9, 3.9426055744119816`*^9, 3.9426057391140194`*^9, 
+   3.9426062966854477`*^9, {3.9426606972677975`*^9, 3.942660707959757*^9}, 
+   3.942728620352669*^9, 3.942729455990494*^9},
+ CellLabel->"Out[48]=",ExpressionUUID->"bafa5e5f-32d6-1b4d-bb40-662cab095391"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"RK45", " ", "Solver"}], " ", "*)"}], "\n", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"rk45Solver", " ", "=", " ", 
+     RowBox[{"Module", "[", "\n", "   ", 
+      RowBox[{
+       RowBox[{"{", "rk45Step", "}"}], ",", "\n", "   ", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"rk45Step", "[", 
+          RowBox[{"f_", ",", " ", "t_", ",", " ", "x_", ",", " ", "h_"}], 
+          "]"}], " ", ":=", " ", 
+         RowBox[{"Module", "[", "\n", "     ", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+            "k1", ",", " ", "k2", ",", " ", "k3", ",", " ", "k4", ",", " ", 
+             "k5", ",", " ", "k6", ",", " ", "xNext", ",", " ", "tNext"}], 
+            "}"}], ",", "\n", "     ", 
+           RowBox[{
+            RowBox[{"k1", " ", "=", " ", 
+             RowBox[{"h", " ", 
+              RowBox[{"f", "[", 
+               RowBox[{"t", ",", " ", "x"}], "]"}]}]}], ";", "\n", "     ", 
+            RowBox[{"k2", " ", "=", " ", 
+             RowBox[{"h", " ", 
+              RowBox[{"f", "[", 
+               RowBox[{
+                RowBox[{"t", " ", "+", " ", 
+                 RowBox[{"h", "/", "4"}]}], ",", " ", 
+                RowBox[{"x", " ", "+", " ", 
+                 RowBox[{"k1", "/", "4"}]}]}], "]"}]}]}], ";", "\n", "     ", 
+            RowBox[{"k3", " ", "=", " ", 
+             RowBox[{"h", " ", 
+              RowBox[{"f", "[", 
+               RowBox[{
+                RowBox[{"t", " ", "+", " ", 
+                 RowBox[{"3", " ", 
+                  RowBox[{"h", "/", "8"}]}]}], ",", " ", 
+                RowBox[{"x", " ", "+", " ", 
+                 RowBox[{
+                  RowBox[{"(", 
+                   RowBox[{
+                    RowBox[{"3", " ", "k1"}], " ", "+", " ", 
+                    RowBox[{"9", " ", "k2"}]}], ")"}], "/", "32"}]}]}], 
+               "]"}]}]}], ";", "\n", "     ", 
+            RowBox[{"k4", " ", "=", " ", 
+             RowBox[{"h", " ", 
+              RowBox[{"f", "[", 
+               RowBox[{
+                RowBox[{"t", " ", "+", " ", 
+                 RowBox[{"12", " ", 
+                  RowBox[{"h", "/", "13"}]}]}], ",", " ", "\n", "       ", 
+                RowBox[{"x", " ", "+", " ", 
+                 RowBox[{
+                  RowBox[{"(", 
+                   RowBox[{
+                    RowBox[{"1932", " ", "k1"}], " ", "-", " ", 
+                    RowBox[{"7200", " ", "k2"}], " ", "+", " ", 
+                    RowBox[{"7296", " ", "k3"}]}], ")"}], "/", "2197"}]}]}], 
+               "]"}]}]}], ";", "\n", "     ", 
+            RowBox[{"k5", " ", "=", " ", 
+             RowBox[{"h", " ", 
+              RowBox[{"f", "[", 
+               RowBox[{
+                RowBox[{"t", " ", "+", " ", "h"}], ",", " ", "\n", "       ", 
+                RowBox[{"x", " ", "+", " ", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{"439", " ", 
+                    RowBox[{"k1", "/", "216"}]}], " ", "-", " ", 
+                   RowBox[{"8", " ", "k2"}], " ", "+", " ", 
+                   RowBox[{"3680", " ", 
+                    RowBox[{"k3", "/", "513"}]}], " ", "-", " ", 
+                   RowBox[{"845", " ", 
+                    RowBox[{"k4", "/", "4104"}]}]}], ")"}]}]}], "]"}]}]}], 
+            ";", "\n", "     ", 
+            RowBox[{"k6", " ", "=", " ", 
+             RowBox[{"h", " ", 
+              RowBox[{"f", "[", 
+               RowBox[{
+                RowBox[{"t", " ", "+", " ", 
+                 RowBox[{"h", "/", "2"}]}], ",", " ", "\n", "       ", 
+                RowBox[{"x", " ", "+", " ", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"-", "8"}], " ", 
+                    RowBox[{"k1", "/", "27"}]}], " ", "+", " ", 
+                   RowBox[{"2", " ", "k2"}], " ", "-", " ", 
+                   RowBox[{"3544", " ", 
+                    RowBox[{"k3", "/", "2565"}]}], " ", "+", " ", 
+                   RowBox[{"1859", " ", 
+                    RowBox[{"k4", "/", "4104"}]}], " ", "-", " ", "\n", 
+                   "          ", 
+                   RowBox[{"11", " ", 
+                    RowBox[{"k5", "/", "40"}]}]}], ")"}]}]}], "]"}]}]}], ";", 
+            "\n", "     ", 
+            RowBox[{"xNext", " ", "=", " ", 
+             RowBox[{"x", " ", "+", " ", "\n", "       ", 
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{"16", " ", 
+                 RowBox[{"k1", "/", "135"}]}], " ", "+", " ", 
+                RowBox[{"6656", " ", 
+                 RowBox[{"k3", "/", "12825"}]}], " ", "+", " ", 
+                RowBox[{"28561", " ", 
+                 RowBox[{"k4", "/", "56430"}]}], " ", "-", " ", 
+                RowBox[{"9", " ", 
+                 RowBox[{"k5", "/", "50"}]}], " ", "+", " ", "\n", 
+                "         ", 
+                RowBox[{"2", " ", 
+                 RowBox[{"k6", "/", "55"}]}]}], ")"}]}]}], ";", "\n", "     ", 
+            RowBox[{"tNext", " ", "=", " ", 
+             RowBox[{"t", " ", "+", " ", "h"}]}], ";", "\n", "     ", 
+            RowBox[{"{", 
+             RowBox[{"tNext", ",", " ", "xNext"}], "}"}]}]}], "\n", "     ", 
+          "]"}]}], ";", "\n", "   ", "rk45Step"}]}], "\n", "   ", "]"}]}], 
+    ";"}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Predator", "-", 
+     RowBox[{"Prey", " ", "Firefighter", " ", "Model"}]}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"simulateFirefighters", " ", "=", " ", "\n", "  ", 
+     RowBox[{"Function", "[", "\n", "   ", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "r", ",", " ", "a", ",", " ", "b", ",", " ", "c", ",", " ", "F0", ",",
+          " ", "W0", ",", " ", "tMax", ",", " ", "h"}], "}"}], ",", "\n", 
+       "   ", 
+       RowBox[{"Module", "[", "\n", "    ", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"t", " ", "=", " ", "0"}], ",", " ", 
+           RowBox[{"x", " ", "=", " ", 
+            RowBox[{"{", 
+             RowBox[{"F0", ",", " ", "W0"}], "}"}]}], ",", " ", 
+           RowBox[{"results", " ", "=", " ", 
+            RowBox[{"{", 
+             RowBox[{"{", 
+              RowBox[{"0", ",", " ", 
+               RowBox[{"{", 
+                RowBox[{"F0", ",", " ", "W0"}], "}"}]}], "}"}], "}"}]}], ",", 
+           " ", "f"}], "}"}], ",", "\n", "    ", 
+         RowBox[{
+          RowBox[{"f", " ", "=", " ", 
+           RowBox[{"Function", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"t", ",", " ", "x"}], "}"}], ",", "\n", "      ", 
+             RowBox[{"Module", "[", "\n", "       ", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"F", " ", "=", " ", 
+                  RowBox[{"x", "[", 
+                   RowBox[{"[", "1", "]"}], "]"}]}], ",", " ", 
+                 RowBox[{"W", " ", "=", " ", 
+                  RowBox[{"x", "[", 
+                   RowBox[{"[", "2", "]"}], "]"}]}]}], "}"}], ",", "\n", 
+               "       ", 
+               RowBox[{"(*", " ", 
+                RowBox[{
+                 RowBox[{"dF", "/", "dt"}], " ", 
+                 RowBox[{"(", 
+                  RowBox[{"Fire", " ", "Growth"}], ")"}]}], " ", "*)"}], "\n",
+                "       ", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"r", " ", "F"}], " ", "-", " ", 
+                  RowBox[{"a", " ", "F", " ", "W"}]}], ",", "\n", "       ", 
+                 RowBox[{"(*", "  ", 
+                  RowBox[{
+                   RowBox[{"dW", "/", "dt"}], " ", 
+                   RowBox[{"(", 
+                    RowBox[{"Firefighter", " ", "Change"}], ")"}]}], " ", 
+                  "*)"}], "\n", "       ", 
+                 RowBox[{
+                  RowBox[{"b", " ", "F", " ", "W"}], " ", "-", " ", 
+                  RowBox[{"c", " ", "W"}]}]}], "}"}]}], "\n", "       ", 
+              "]"}]}], "\n", "      ", "]"}]}], ";", "\n", "    ", 
+          RowBox[{"While", "[", 
+           RowBox[{
+            RowBox[{"t", " ", "<", " ", "tMax"}], ",", " ", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"t", ",", " ", "x"}], "}"}], " ", "=", " ", 
+              RowBox[{"rk45Solver", "[", 
+               RowBox[{"f", ",", " ", "t", ",", " ", "x", ",", " ", "h"}], 
+               "]"}]}], ";", "\n", "     ", 
+             RowBox[{"AppendTo", "[", 
+              RowBox[{"results", ",", " ", 
+               RowBox[{"{", 
+                RowBox[{"t", ",", " ", "x"}], "}"}]}], "]"}]}]}], "]"}], ";", 
+          "\n", "    ", "results"}]}], "\n", "    ", "]"}]}], "\n", "   ", 
+      "]"}]}], ";"}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Phase", " ", "Diagram"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"plotPhaseDiagram", " ", "=", " ", "\n", "  ", 
+     RowBox[{"Function", "[", "\n", "   ", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "r", ",", " ", "a", ",", " ", "b", ",", " ", "c", ",", " ", "F0", ",",
+          " ", "W0", ",", " ", "tMax", ",", " ", "h"}], "}"}], ",", "\n", 
+       "   ", 
+       RowBox[{"Module", "[", "\n", "    ", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+          "results", ",", " ", "vectorField", ",", " ", "FRange", ",", " ", 
+           "WRange"}], "}"}], ",", "\n", "    ", 
+         RowBox[{
+          RowBox[{"results", " ", "=", " ", 
+           RowBox[{"simulateFirefighters", "[", 
+            RowBox[{
+            "r", ",", " ", "a", ",", " ", "b", ",", " ", "c", ",", " ", "F0", 
+             ",", " ", "W0", ",", " ", "tMax", ",", " ", "h"}], "]"}]}], ";", 
+          "\n", "    ", 
+          RowBox[{"vectorField", " ", "=", " ", "\n", "     ", 
+           RowBox[{"Function", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"F", ",", " ", "W"}], "}"}], ",", " ", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"r", " ", "F"}], " ", "-", " ", 
+                RowBox[{"a", " ", "F", " ", "W"}]}], ",", " ", 
+               RowBox[{
+                RowBox[{"b", " ", "F", " ", "W"}], " ", "-", " ", 
+                RowBox[{"c", " ", "W"}]}]}], "}"}]}], "]"}]}], ";", "\n", 
+          "    ", 
+          RowBox[{"FRange", " ", "=", " ", 
+           RowBox[{"{", 
+            RowBox[{"0", ",", " ", "200"}], "}"}]}], ";", "\n", "    ", 
+          RowBox[{"WRange", " ", "=", " ", 
+           RowBox[{"{", 
+            RowBox[{"0", ",", " ", "100"}], "}"}]}], ";", "\n", "    ", 
+          RowBox[{"Show", "[", "\n", "     ", 
+           RowBox[{
+            RowBox[{"StreamPlot", "[", "\n", "      ", 
+             RowBox[{
+              RowBox[{"vectorField", "[", 
+               RowBox[{"F", ",", " ", "W"}], "]"}], ",", "\n", "      ", 
+              RowBox[{"{", 
+               RowBox[{"F", ",", " ", 
+                RowBox[{"Sequence", " ", "@@", " ", "FRange"}]}], "}"}], ",", 
+              "\n", "      ", 
+              RowBox[{"{", 
+               RowBox[{"W", ",", " ", 
+                RowBox[{"Sequence", " ", "@@", " ", "WRange"}]}], "}"}], ",", 
+              "\n", "      ", 
+              RowBox[{"StreamStyle", " ", "->", " ", 
+               RowBox[{"Arrowheads", "[", "Small", "]"}]}], ",", "\n", 
+              "      ", 
+              RowBox[{"Frame", " ", "->", " ", "True"}], ",", "\n", "      ", 
+              RowBox[{"FrameLabel", " ", "->", " ", 
+               RowBox[{"{", 
+                RowBox[{
+                "\"\<Fire (F)\>\"", ",", " ", "\"\<Firefighters (W)\>\""}], 
+                "}"}]}]}], "\n", "      ", "]"}], ",", "\n", "     ", 
+            RowBox[{"Graphics", "[", 
+             RowBox[{"{", 
+              RowBox[{"Thick", ",", " ", "Red", ",", " ", "\n", "       ", 
+               RowBox[{"Line", "[", 
+                RowBox[{"Transpose", "[", 
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{"results", "[", 
+                    RowBox[{"[", 
+                    RowBox[{"All", ",", " ", "2", ",", " ", "1"}], "]"}], 
+                    "]"}], ",", " ", "\n", "          ", 
+                   RowBox[{"results", "[", 
+                    RowBox[{"[", 
+                    RowBox[{"All", ",", " ", "2", ",", " ", "2"}], "]"}], 
+                    "]"}]}], "}"}], "]"}], "]"}]}], "}"}], "]"}]}], "\n", 
+           "     ", "]"}]}]}], "\n", "    ", "]"}]}], "\n", "   ", "]"}]}], 
+    ";"}], "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Time", " ", "Series", " ", "Plot"}], " ", "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"plotFirefightersTimeSeries", " ", "=", " ", "\n", "  ", 
+     RowBox[{"Function", "[", "\n", "   ", 
+      RowBox[{
+       RowBox[{"{", "results", "}"}], ",", "\n", "   ", 
+       RowBox[{"Module", "[", "\n", "    ", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"tValues", ",", " ", "FValues", ",", " ", "WValues"}], 
+          "}"}], ",", "\n", "    ", 
+         RowBox[{
+          RowBox[{"tValues", " ", "=", " ", 
+           RowBox[{"results", "[", 
+            RowBox[{"[", 
+             RowBox[{"All", ",", " ", "1"}], "]"}], "]"}]}], ";", "\n", 
+          "    ", 
+          RowBox[{"FValues", " ", "=", " ", 
+           RowBox[{"results", "[", 
+            RowBox[{"[", 
+             RowBox[{"All", ",", " ", "2", ",", " ", "1"}], "]"}], "]"}]}], 
+          ";", "\n", "    ", 
+          RowBox[{"WValues", " ", "=", " ", 
+           RowBox[{"results", "[", 
+            RowBox[{"[", 
+             RowBox[{"All", ",", " ", "2", ",", " ", "2"}], "]"}], "]"}]}], 
+          ";", "\n", "    ", 
+          RowBox[{"ListLinePlot", "[", "\n", "     ", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"Transpose", "[", 
+               RowBox[{"{", 
+                RowBox[{"tValues", ",", " ", "FValues"}], "}"}], "]"}], ",", 
+              " ", "\n", "      ", 
+              RowBox[{"Transpose", "[", 
+               RowBox[{"{", 
+                RowBox[{"tValues", ",", " ", "WValues"}], "}"}], "]"}]}], 
+             "}"}], ",", "\n", "     ", 
+            RowBox[{"PlotStyle", " ", "->", " ", 
+             RowBox[{"{", 
+              RowBox[{"Orange", ",", " ", "Blue"}], "}"}]}], ",", "\n", 
+            "     ", 
+            RowBox[{"Frame", " ", "->", " ", "True"}], ",", "\n", "     ", 
+            RowBox[{"FrameLabel", " ", "->", " ", 
+             RowBox[{"{", 
+              RowBox[{"\"\<Time\>\"", ",", " ", "\"\<Population\>\""}], 
+              "}"}]}], ",", "\n", "     ", 
+            RowBox[{"PlotLegends", " ", "->", " ", 
+             RowBox[{"{", 
+              RowBox[{
+              "\"\<Fire (F)\>\"", ",", " ", "\"\<Firefighters (W)\>\""}], 
+              "}"}]}], ",", "\n", "     ", 
+            RowBox[{"ImageSize", " ", "->", " ", "Large"}]}], "\n", "     ", 
+           "]"}]}]}], "\n", "    ", "]"}]}], "\n", "   ", "]"}]}], ";"}], 
+   "\n", "\n", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Manipulate", " ", "Plot"}], " ", "*)"}], "\n", 
+   RowBox[{"Manipulate", "[", "\n", " ", 
+    RowBox[{
+     RowBox[{"Module", "[", "\n", "  ", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"results", ",", " ", "phasePlot"}], "}"}], ",", "\n", "  ", 
+       RowBox[{
+        RowBox[{"results", " ", "=", " ", 
+         RowBox[{"simulateFirefighters", "[", 
+          RowBox[{
+          "r", ",", " ", "a", ",", " ", "b", ",", " ", "c", ",", " ", "F0", 
+           ",", " ", "W0", ",", " ", "tMax", ",", " ", "h"}], "]"}]}], ";", 
+        "\n", "  ", 
+        RowBox[{"phasePlot", " ", "=", " ", 
+         RowBox[{"plotPhaseDiagram", "[", 
+          RowBox[{
+          "r", ",", " ", "a", ",", " ", "b", ",", " ", "c", ",", " ", "F0", 
+           ",", " ", "W0", ",", " ", "tMax", ",", " ", "h"}], "]"}]}], ";", 
+        "\n", "  ", 
+        RowBox[{"Column", "[", "\n", "   ", 
+         RowBox[{"{", "\n", "    ", 
+          RowBox[{
+           RowBox[{"Style", "[", 
+            RowBox[{
+            "\"\<Fire vs. Firefighters (Predator-Prey) Model\>\"", ",", " ", 
+             "Bold", ",", " ", "14"}], "]"}], ",", "\n", "    ", 
+           RowBox[{"plotFirefightersTimeSeries", "[", "results", "]"}], ",", 
+           "\n", "    ", "phasePlot", ",", "\n", "    ", 
+           RowBox[{"Style", "[", 
+            RowBox[{
+            "\"\<Interpretation:\>\"", ",", " ", "Bold", ",", " ", "12"}], 
+            "]"}]}], "\n", "    ", "}"}], "\n", "   ", "]"}]}]}], "\n", "  ", 
+      "]"}], ",", "\n", " ", 
+     RowBox[{"(*", " ", 
+      RowBox[{"Sliders", " ", "for", " ", "parameters"}], " ", "*)"}], "\n", 
+     " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"r", ",", " ", "0.2", ",", " ", "\"\<Fire Growth (r)\>\""}], 
+        "}"}], ",", " ", "0.05", ",", " ", "0.5", ",", " ", "0.05"}], "}"}], 
+     ",", "\n", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "a", ",", " ", "0.008", ",", " ", "\"\<Suppression Rate (a)\>\""}], 
+        "}"}], ",", " ", "0.001", ",", " ", "0.05", ",", " ", "0.001"}], 
+      "}"}], ",", "\n", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "b", ",", " ", "0.002", ",", " ", 
+         "\"\<Firefighter Recruitment (b)\>\""}], "}"}], ",", " ", "0.001", 
+       ",", " ", "0.05", ",", " ", "0.001"}], "}"}], ",", "\n", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "c", ",", " ", "0.1", ",", " ", "\"\<Firefighter Depletion (c)\>\""}],
+         "}"}], ",", " ", "0.05", ",", " ", "0.5", ",", " ", "0.01"}], "}"}], 
+     ",", "\n", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "F0", ",", " ", "100", ",", " ", "\"\<Initial Fire (F0)\>\""}], "}"}],
+        ",", " ", "10", ",", " ", "200", ",", " ", "10"}], "}"}], ",", "\n", 
+     " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "W0", ",", " ", "20", ",", " ", "\"\<Initial Firefighters (W0)\>\""}],
+         "}"}], ",", " ", "0", ",", " ", "100", ",", " ", "5"}], "}"}], ",", 
+     "\n", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"tMax", ",", " ", "100", ",", " ", "\"\<Total Time\>\""}], 
+        "}"}], ",", " ", "50", ",", " ", "200", ",", " ", "10"}], "}"}], ",", 
+     "\n", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"h", ",", " ", "0.1", ",", " ", "\"\<Step Size\>\""}], "}"}], 
+       ",", " ", "0.01", ",", " ", "1.0", ",", " ", "0.01"}], "}"}], ",", 
+     "\n", " ", 
+     RowBox[{"ControlPlacement", " ", "->", " ", "Left"}], ",", " ", 
+     RowBox[{"SaveDefinitions", " ", "->", " ", "True"}]}], "\n", " ", 
+    "]"}]}]}]], "Code",
+ CellChangeTimes->{
+  3.942659201822098*^9, 3.9426595283120823`*^9, 3.942659829288086*^9, {
+   3.9426599005298615`*^9, 3.942659903412014*^9}, 3.942660008341791*^9, {
+   3.9426608447635384`*^9, 3.942660846579056*^9}, {3.942729498459427*^9, 
+   3.942729498674595*^9}},ExpressionUUID->"1ce5d7c1-723d-7844-9572-\
+7cf53cec6f54"],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`a$$ = 0.008, $CellContext`b$$ = 
+    0.002, $CellContext`c$$ = 0.1, $CellContext`F0$$ = 100, $CellContext`h$$ =
+     0.1, $CellContext`r$$ = 0.2, $CellContext`tMax$$ = 
+    100, $CellContext`W0$$ = 20, Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"untitled\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`r$$], 0.2, "Fire Growth (r)"}, 0.05, 0.5, 0.05, 
+      ControlType -> Manipulator}, {{
+       Hold[$CellContext`a$$], 0.008, "Suppression Rate (a)"}, 0.001, 0.05, 
+      0.001, ControlType -> Manipulator}, {{
+       Hold[$CellContext`b$$], 0.002, "Firefighter Recruitment (b)"}, 0.001, 
+      0.05, 0.001, ControlType -> Manipulator}, {{
+       Hold[$CellContext`c$$], 0.1, "Firefighter Depletion (c)"}, 0.05, 0.5, 
+      0.01, ControlType -> Manipulator}, {{
+       Hold[$CellContext`F0$$], 100, "Initial Fire (F0)"}, 10, 200, 10, 
+      ControlType -> Manipulator}, {{
+       Hold[$CellContext`W0$$], 20, "Initial Firefighters (W0)"}, 0, 100, 5, 
+      ControlType -> Manipulator}, {{
+       Hold[$CellContext`tMax$$], 100, "Total Time"}, 50, 200, 10, 
+      ControlType -> Manipulator}, {{
+       Hold[$CellContext`h$$], 0.1, "Step Size"}, 0.01, 1., 0.01, ControlType -> 
+      Manipulator}}, Typeset`size$$ = {
+    769.4169156360626, {341.727147457323, 347.5472647709706}}, 
+    Typeset`update$$ = 0, Typeset`initDone$$, Typeset`skipInitDone$$ = False, 
+    Typeset`keyframeActionsQ$$ = False, Typeset`keyframeList$$ = {}}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`a$$ = 0.008, $CellContext`b$$ = 
+        0.002, $CellContext`c$$ = 0.1, $CellContext`F0$$ = 
+        100, $CellContext`h$$ = 0.1, $CellContext`r$$ = 
+        0.2, $CellContext`tMax$$ = 100, $CellContext`W0$$ = 20}, 
+      "ControllerVariables" :> {}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$, Typeset`keyframeActionsQ$$, 
+        Typeset`keyframeList$$}, "Body" :> 
+      Module[{$CellContext`results$, $CellContext`phasePlot$}, \
+$CellContext`results$ = $CellContext`simulateFirefighters[$CellContext`r$$, \
+$CellContext`a$$, $CellContext`b$$, $CellContext`c$$, $CellContext`F0$$, \
+$CellContext`W0$$, $CellContext`tMax$$, $CellContext`h$$]; \
+$CellContext`phasePlot$ = $CellContext`plotPhaseDiagram[$CellContext`r$$, \
+$CellContext`a$$, $CellContext`b$$, $CellContext`c$$, $CellContext`F0$$, \
+$CellContext`W0$$, $CellContext`tMax$$, $CellContext`h$$]; Column[{
+           Style["Fire vs. Firefighters (Predator-Prey) Model", Bold, 14], 
+           $CellContext`plotFirefightersTimeSeries[$CellContext`results$], \
+$CellContext`phasePlot$, 
+           Style["Interpretation:", Bold, 12], 
+           "Fire (F): Spreads based on growth rate and interaction with \
+firefighters.", 
+           "Firefighters (W): Suppress fire but deplete resources over time.",
+            "Phase diagram shows the interaction between fire and \
+firefighters over time."}]], 
+      "Specifications" :> {{{$CellContext`r$$, 0.2, "Fire Growth (r)"}, 0.05, 
+         0.5, 0.05}, {{$CellContext`a$$, 0.008, "Suppression Rate (a)"}, 
+         0.001, 0.05, 
+         0.001}, {{$CellContext`b$$, 0.002, "Firefighter Recruitment (b)"}, 
+         0.001, 0.05, 
+         0.001}, {{$CellContext`c$$, 0.1, "Firefighter Depletion (c)"}, 0.05, 
+         0.5, 0.01}, {{$CellContext`F0$$, 100, "Initial Fire (F0)"}, 10, 200, 
+         10}, {{$CellContext`W0$$, 20, "Initial Firefighters (W0)"}, 0, 100, 
+         5}, {{$CellContext`tMax$$, 100, "Total Time"}, 50, 200, 
+         10}, {{$CellContext`h$$, 0.1, "Step Size"}, 0.01, 1., 0.01}}, 
+      "Options" :> {ControlPlacement -> Left}, "DefaultOptions" :> {}],
+     ImageSizeCache->{
+      1163.9751914219858`, {372.695077144823, 378.51519445847066`}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    Initialization:>({$CellContext`phasePlot = Function[$CellContext`f$, 
+         Manipulate[
+          
+          Module[{$CellContext`sign$ = 
+            D[$CellContext`f$, $CellContext`x] > 0, $CellContext`nodes$ = 
+            Select[Element[#, Reals]& ][
+              ReplaceAll[$CellContext`x, 
+               Solve[$CellContext`f$ == 0, $CellContext`x]]]}, 
+           
+           Plot[$CellContext`f$, {$CellContext`x, -3, 3}, 
+            PlotRange -> {-5, 5}, Epilog -> {
+              PointSize[Large], 
+              Point[
+               Map[{#, 0}& ][
+                Select[Not[
+                  
+                  ReplaceAll[$CellContext`sign$, $CellContext`x -> #]]& \
+][$CellContext`nodes$]]], 
+              Point[
+               Map[{#, 0}& ][
+                Select[
+                ReplaceAll[$CellContext`sign$, $CellContext`x -> #]& \
+][$CellContext`nodes$]]], White, 
+              Point[
+               Map[{#, 0}& ][
+                Select[
+                ReplaceAll[$CellContext`sign$, $CellContext`x -> #]& \
+][$CellContext`nodes$]]]}, 
+            AxesLabel -> {"x", "\!\(\*FractionBox[\(dx\), \(dt\)]\)"}]], {
+          FE`r$$1894, -3, 3}]], Attributes[$CellContext`f$] = {Temporary}, 
+       Attributes[$CellContext`sign$] = {Temporary}, 
+       Attributes[$CellContext`nodes$] = {
+        Temporary}, $CellContext`simulateFirefighters = 
+       Function[{$CellContext`r, $CellContext`a, $CellContext`b, \
+$CellContext`c, $CellContext`F0, $CellContext`W0, $CellContext`tMax, \
+$CellContext`h}, 
+         Module[{$CellContext`t = 
+           0, $CellContext`x = {$CellContext`F0, $CellContext`W0}, \
+$CellContext`results = {{
+             0, {$CellContext`F0, $CellContext`W0}}}, $CellContext`f}, \
+$CellContext`f = Function[{$CellContext`t, $CellContext`x}, 
+             
+             Module[{$CellContext`F = Part[$CellContext`x, 1], $CellContext`W = 
+               Part[$CellContext`x, 
+                 2]}, {$CellContext`r $CellContext`F - $CellContext`a \
+$CellContext`F $CellContext`W, $CellContext`b $CellContext`F $CellContext`W - \
+$CellContext`c $CellContext`W}]]; 
+          While[$CellContext`t < $CellContext`tMax, {$CellContext`t, \
+$CellContext`x} = $CellContext`rk45Solver[$CellContext`f, $CellContext`t, \
+$CellContext`x, $CellContext`h]; 
+            AppendTo[$CellContext`results, {$CellContext`t, $CellContext`x}]]; \
+$CellContext`results]], $CellContext`f = 
+       Function[{$CellContext`a, $CellContext`b, $CellContext`c, \
+$CellContext`d, $CellContext`e, $CellContext`f}, 
+         Function[{$CellContext`t, $CellContext`x, $CellContext`y, \
+$CellContext`z}, {($CellContext`z - $CellContext`b) $CellContext`x - \
+$CellContext`d $CellContext`y, $CellContext`d $CellContext`x + \
+($CellContext`z - $CellContext`b) $CellContext`y, $CellContext`c + \
+$CellContext`a $CellContext`z - $CellContext`z^3/
+           3 - ($CellContext`x^2 + $CellContext`y^2) (
+            1 + $CellContext`e $CellContext`z) + $CellContext`f \
+$CellContext`z $CellContext`x^3}]], $CellContext`rk45Solver = \
+$CellContext`rk45Step$563097, 
+       Attributes[$CellContext`rk45Step$563097] = {
+        Temporary}, $CellContext`rk45Step$563097[
+         Pattern[$CellContext`f, 
+          Blank[]], 
+         Pattern[$CellContext`t, 
+          Blank[]], 
+         Pattern[$CellContext`x, 
+          Blank[]], 
+         Pattern[$CellContext`h, 
+          Blank[]]] := 
+       Module[{$CellContext`k1, $CellContext`k2, $CellContext`k3, \
+$CellContext`k4, $CellContext`k5, $CellContext`k6, $CellContext`xNext, \
+$CellContext`tNext}, $CellContext`k1 = $CellContext`h \
+$CellContext`f[$CellContext`t, $CellContext`x]; $CellContext`k2 = \
+$CellContext`h $CellContext`f[$CellContext`t + $CellContext`h/
+              4, $CellContext`x + $CellContext`k1/
+              4]; $CellContext`k3 = $CellContext`h \
+$CellContext`f[$CellContext`t + 
+             3 ($CellContext`h/8), $CellContext`x + (3 $CellContext`k1 + 
+               9 $CellContext`k2)/
+              32]; $CellContext`k4 = $CellContext`h \
+$CellContext`f[$CellContext`t + 
+             12 ($CellContext`h/13), $CellContext`x + (1932 $CellContext`k1 - 
+               7200 $CellContext`k2 + 7296 $CellContext`k3)/
+              2197]; $CellContext`k5 = $CellContext`h \
+$CellContext`f[$CellContext`t + $CellContext`h, $CellContext`x + (
+              439 ($CellContext`k1/216) - 8 $CellContext`k2 + 
+              3680 ($CellContext`k3/513) - 
+              845 ($CellContext`k4/
+               4104))]; $CellContext`k6 = $CellContext`h \
+$CellContext`f[$CellContext`t + $CellContext`h/
+              2, $CellContext`x + ((-8) ($CellContext`k1/27) + 
+              2 $CellContext`k2 - 3544 ($CellContext`k3/2565) + 
+              1859 ($CellContext`k4/4104) - 
+              11 ($CellContext`k5/
+               40))]; $CellContext`xNext = $CellContext`x + (
+            16 ($CellContext`k1/135) + 6656 ($CellContext`k3/12825) + 
+            28561 ($CellContext`k4/56430) - 9 ($CellContext`k5/50) + 
+            2 ($CellContext`k6/
+              55)); $CellContext`tNext = $CellContext`t + $CellContext`h; \
+{$CellContext`tNext, $CellContext`xNext}], $CellContext`plotPhaseDiagram = 
+       Function[{$CellContext`r, $CellContext`a, $CellContext`b, \
+$CellContext`c, $CellContext`F0, $CellContext`W0, $CellContext`tMax, \
+$CellContext`h}, 
+         Module[{$CellContext`results, $CellContext`vectorField, \
+$CellContext`FRange, $CellContext`WRange}, $CellContext`results = \
+$CellContext`simulateFirefighters[$CellContext`r, $CellContext`a, \
+$CellContext`b, $CellContext`c, $CellContext`F0, $CellContext`W0, \
+$CellContext`tMax, $CellContext`h]; $CellContext`vectorField = 
+           Function[{$CellContext`F, $CellContext`W}, {$CellContext`r \
+$CellContext`F - $CellContext`a $CellContext`F $CellContext`W, $CellContext`b \
+$CellContext`F $CellContext`W - $CellContext`c $CellContext`W}]; \
+$CellContext`FRange = {0, 200}; $CellContext`WRange = {0, 100}; Show[
+            StreamPlot[
+             $CellContext`vectorField[$CellContext`F, $CellContext`W], \
+{$CellContext`F, 
+              Apply[Sequence, $CellContext`FRange]}, {$CellContext`W, 
+              Apply[Sequence, $CellContext`WRange]}, StreamStyle -> 
+             Arrowheads[Small], Frame -> True, 
+             FrameLabel -> {"Fire (F)", "Firefighters (W)"}], 
+            Graphics[{Thick, Red, 
+              Line[
+               Transpose[{
+                 Part[$CellContext`results, All, 2, 1], 
+                 
+                 Part[$CellContext`results, All, 2, 
+                  2]}]]}]]]], $CellContext`plotFirefightersTimeSeries = 
+       Function[{$CellContext`results}, 
+         Module[{$CellContext`tValues, $CellContext`FValues, \
+$CellContext`WValues}, $CellContext`tValues = 
+           Part[$CellContext`results, All, 1]; $CellContext`FValues = 
+           Part[$CellContext`results, All, 2, 1]; $CellContext`WValues = 
+           Part[$CellContext`results, All, 2, 2]; ListLinePlot[{
+             Transpose[{$CellContext`tValues, $CellContext`FValues}], 
+             Transpose[{$CellContext`tValues, $CellContext`WValues}]}, 
+            PlotStyle -> {Orange, Blue}, Frame -> True, 
+            FrameLabel -> {"Time", "Population"}, 
+            PlotLegends -> {"Fire (F)", "Firefighters (W)"}, ImageSize -> 
+            Large]]]}; Typeset`initDone$$ = True),
+    SynchronousInitialization->True,
+    UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{3.9426592032582207`*^9, 3.942659836966202*^9, 
+  3.942659905543289*^9, 3.9426600131505966`*^9, 3.942660848451185*^9, 
+  3.942729486905756*^9},
+ CellLabel->"Out[53]=",ExpressionUUID->"7e309677-8e4f-f64f-8577-d3de4bee7bd3"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "A  P  P  E  N  D  I  X    ",
+ StyleBox[
+ CounterBox["AppendixSectionLabel"], "BookChapterNumber"]
+}], "AppendixSectionLabel",ExpressionUUID->"522278ff-a9c2-ed4b-8d86-\
+aa101fca803b"],
+
+Cell["Enter appendix title here", "AppendixSection",ExpressionUUID->"7ab28208-574b-4346-8ec3-824712108aed"],
+
+Cell[CellGroupData[{
+
+Cell["Enter acknowledgments title here", "AcknowledgmentsSection",ExpressionUUID->"89b59068-5cd9-d54b-b7c4-df4c7c762d99"],
+
+Cell["Enter acknowledgment text here.", "Acknowledgments",ExpressionUUID->"2dec27f6-5314-5249-bf51-4cfa114f4d8e"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Enter endnote title here", "EndnoteSection",ExpressionUUID->"e6ee7a9b-cccb-ca43-8a12-b2185a0c3fbb"],
+
+Cell["Enter endnote text here.", "Endnote",ExpressionUUID->"325a1f97-7519-594f-832d-017f60ee48fc"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Enter reference title here", "ReferenceSection",ExpressionUUID->"aae57c90-3084-644b-b723-d2c8157c47c9"],
+
+Cell[CellGroupData[{
+
+Cell[TextData[{
+ "Authorlast, \[OpenCurlyDoubleQuote]Article Title,\[CloseCurlyDoubleQuote] ",
+ StyleBox["Journal Title",
+  FontSlant->"Italic"],
+ ", ",
+ StyleBox["Volume",
+  FontWeight->"Bold"],
+ "(Issue), 2005 pp. #\[Dash]#."
+}], "Reference",ExpressionUUID->"7531dcd4-ae33-7f48-874e-12c6b438d4b3"],
+
+Cell[TextData[{
+ "Authorlast1 and B. Authorlast2, \[OpenCurlyDoubleQuote]Article Title,\
+\[CloseCurlyDoubleQuote] ",
+ StyleBox["Journal Title",
+  FontSlant->"Italic"],
+ ", ",
+ StyleBox["Volume",
+  FontWeight->"Bold"],
+ "(Issue), 2005 pp. #\[Dash]#."
+}], "Reference",ExpressionUUID->"39ed9118-9f94-a949-83b6-311b5f18db59"],
+
+Cell[TextData[{
+ "Authorlast1, B. Authorlast2, and C. Authorlast3, \
+\[OpenCurlyDoubleQuote]Article Title,\[CloseCurlyDoubleQuote] ",
+ StyleBox["Journal Title",
+  FontSlant->"Italic"],
+ ", ",
+ StyleBox["Volume",
+  FontWeight->"Bold"],
+ "(Issue), 2005 pp. #\[Dash]#."
+}], "Reference",ExpressionUUID->"2db6f85d-bcc1-7049-bf33-3c5df7219d06"],
+
+Cell[TextData[{
+ "Authorlast, ",
+ StyleBox["Book Title",
+  FontSlant->"Italic"],
+ ", ",
+ StyleBox["n",
+  FontSlant->"Italic"],
+ "th ed., Publisher Location: Publisher Name, 2005."
+}], "Reference",ExpressionUUID->"a41bc837-77e1-1e40-a45d-9d416ded3cea"],
+
+Cell[TextData[{
+ "Authorlast1 and B. Authorlast2, ",
+ StyleBox["Book Title",
+  FontSlant->"Italic"],
+ ", ",
+ StyleBox["n",
+  FontSlant->"Italic"],
+ "th ed., Publisher Location: Publisher Name, 2005."
+}], "Reference",ExpressionUUID->"61873d3b-0673-044f-9c68-f2060f405a7b"],
+
+Cell[TextData[{
+ "Authorlast1, B. Authorlast2, and C. Authorlast3, ",
+ StyleBox["Book Title",
+  FontSlant->"Italic"],
+ ", ",
+ StyleBox["n",
+  FontSlant->"Italic"],
+ "th ed., Publisher Location: Publisher Name, 2005."
+}], "Reference",ExpressionUUID->"005809c1-a305-204e-9530-310639753eae"],
+
+Cell[TextData[{
+ "Authorlast, \[OpenCurlyDoubleQuote]Paper Title,\[CloseCurlyDoubleQuote] in ",
+ StyleBox["Conference Proceedings Title (Conference Acronym and Year)",
+  FontSlant->"Italic"],
+ ", Conference Location (A. Authorlast, ed.), Publisher Location: Publisher \
+Name, Publication Date pp. #\[Dash]#."
+}], "Reference",ExpressionUUID->"38b0cd03-53c7-0c41-92fd-af550e174c91"],
+
+Cell[TextData[{
+ "Authorlast1, B. Authorlast2, and C. Authorlast3, \
+\[OpenCurlyDoubleQuote]Paper Title,\[CloseCurlyDoubleQuote] in ",
+ StyleBox["Conference Proceedings Title (Conference Acronym and Year)",
+  FontSlant->"Italic"],
+ ", Conference Location (A. Authorlast, ed.), Publisher Location: Publisher \
+Name, Publication Date pp. #\[Dash]#."
+}], "Reference",ExpressionUUID->"6ba8e3b0-bc06-d246-89d4-756c6e1e2909"],
+
+Cell[TextData[{
+ "Authorlast1, B. Authorlast2, and C. Authorlast3, \
+\[OpenCurlyDoubleQuote]Paper Title,\[CloseCurlyDoubleQuote] in ",
+ StyleBox["Conference Proceedings Title (Conference Acronym and Year)",
+  FontSlant->"Italic"],
+ ", Conference Location (A. Authorlast, ed.), Publisher Location: Publisher \
+Name, Publication Date pp. #\[Dash]#."
+}], "Reference",ExpressionUUID->"a31ab9b2-bd3d-4046-ac00-066e6c7573f1"],
+
+Cell["\<\
+Authorlast. \[OpenCurlyDoubleQuote]Website Title.\[CloseCurlyDoubleQuote] \
+(Last updated date or date visited in three-character Month Day, Year format) \
+URL.\
+\>", "Reference",ExpressionUUID->"841cbdc7-f61a-524b-8584-57f4e28575d4"],
+
+Cell["\<\
+B. Authorlast. \[OpenCurlyDoubleQuote]Entry Title\[CloseCurlyDoubleQuote] \
+from CompanyN\[LongDash]A CompanyN Web Resource. URL.\
+\>", "Reference",ExpressionUUID->"5d0c8d33-d87c-e449-8899-a073fbf28f4d"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1428, 729.75},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+Magnification:>1.1 Inherited,
+FrontEndVersion->"14.1 for Microsoft Windows (64-bit) (July 16, 2024)",
+StyleDefinitions->FrontEnd`FileName[{"Book"}, "Monograph.nb", 
+  CharacterEncoding -> "UTF-8"],
+PrivateNotebookOptions -> {"NotebookAuthor" -> ""},
+ExpressionUUID->"2df4ca71-f7ca-8b44-90a0-7591aeec6597"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[576, 22, 240, 8, 109, "BookChapterLabel",ExpressionUUID->"26d3df60-460f-504d-b1f9-f42dcf8d1838"],
+Cell[819, 32, 216, 4, 153, "BookChapterTitle",ExpressionUUID->"c525ce74-888d-264f-864b-dd137e0fd588"],
+Cell[CellGroupData[{
+Cell[1060, 40, 342, 11, 76, "Section",ExpressionUUID->"758b9bc6-8ba6-cb4c-a16f-ecf47a06dbde"],
+Cell[1405, 53, 143, 3, 16, "Text",ExpressionUUID->"79311ec6-fcb6-c148-bf3e-68d721011c12"],
+Cell[1551, 58, 221, 4, 16, "Text",ExpressionUUID->"e3cf3017-1836-0546-959b-e1357d06a2a9"],
+Cell[1775, 64, 71, 0, 16, "Text",ExpressionUUID->"3cddeeb6-1cd0-494b-8b58-51877261278d"],
+Cell[CellGroupData[{
+Cell[1871, 68, 19074, 440, 2315, "Code",ExpressionUUID->"22091ba0-514d-6f48-9fe7-cf17163093b4"],
+Cell[20948, 510, 11843, 221, 698, "Output",ExpressionUUID->"bafa5e5f-32d6-1b4d-bb40-662cab095391"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[32828, 736, 19041, 443, 2334, "Code",ExpressionUUID->"1ce5d7c1-723d-7844-9572-7cf53cec6f54"],
+Cell[51872, 1181, 12096, 226, 767, "Output",ExpressionUUID->"7e309677-8e4f-f64f-8577-d3de4bee7bd3"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[64029, 1414, 200, 5, 103, "AppendixSectionLabel",ExpressionUUID->"522278ff-a9c2-ed4b-8d86-aa101fca803b"],
+Cell[64232, 1421, 107, 0, 153, "AppendixSection",ExpressionUUID->"7ab28208-574b-4346-8ec3-824712108aed"],
+Cell[CellGroupData[{
+Cell[64364, 1425, 121, 0, 144, "AcknowledgmentsSection",ExpressionUUID->"89b59068-5cd9-d54b-b7c4-df4c7c762d99"],
+Cell[64488, 1427, 113, 0, 16, "Acknowledgments",ExpressionUUID->"2dec27f6-5314-5249-bf51-4cfa114f4d8e"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[64650, 1433, 105, 0, 219, "EndnoteSection",ExpressionUUID->"e6ee7a9b-cccb-ca43-8a12-b2185a0c3fbb"],
+Cell[64758, 1435, 98, 0, 16, "Endnote",ExpressionUUID->"325a1f97-7519-594f-832d-017f60ee48fc"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[64893, 1440, 109, 0, 219, "ReferenceSection",ExpressionUUID->"aae57c90-3084-644b-b723-d2c8157c47c9"],
+Cell[CellGroupData[{
+Cell[65027, 1444, 299, 8, 19, "Reference",ExpressionUUID->"7531dcd4-ae33-7f48-874e-12c6b438d4b3"],
+Cell[65329, 1454, 321, 9, 19, "Reference",ExpressionUUID->"39ed9118-9f94-a949-83b6-311b5f18db59"],
+Cell[65653, 1465, 338, 9, 19, "Reference",ExpressionUUID->"2db6f85d-bcc1-7049-bf33-3c5df7219d06"],
+Cell[65994, 1476, 251, 8, 19, "Reference",ExpressionUUID->"a41bc837-77e1-1e40-a45d-9d416ded3cea"],
+Cell[66248, 1486, 271, 8, 19, "Reference",ExpressionUUID->"61873d3b-0673-044f-9c68-f2060f405a7b"],
+Cell[66522, 1496, 288, 8, 19, "Reference",ExpressionUUID->"005809c1-a305-204e-9530-310639753eae"],
+Cell[66813, 1506, 380, 6, 19, "Reference",ExpressionUUID->"38b0cd03-53c7-0c41-92fd-af550e174c91"],
+Cell[67196, 1514, 419, 7, 19, "Reference",ExpressionUUID->"6ba8e3b0-bc06-d246-89d4-756c6e1e2909"],
+Cell[67618, 1523, 419, 7, 19, "Reference",ExpressionUUID->"a31ab9b2-bd3d-4046-ac00-066e6c7573f1"],
+Cell[68040, 1532, 244, 4, 19, "Reference",ExpressionUUID->"841cbdc7-f61a-524b-8584-57f4e28575d4"],
+Cell[68287, 1538, 213, 3, 19, "Reference",ExpressionUUID->"5d0c8d33-d87c-e449-8899-a073fbf28f4d"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
